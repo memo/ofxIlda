@@ -58,6 +58,12 @@ void testApp::keyPressed(int key){
             // toggle draw points (on screen only)
         case 'p': ildaFrame.params.draw.points ^= true; break;
             
+        case '.': ildaFrame.params.path.targetPointCount++; break;
+        case ',': if(ildaFrame.params.path.targetPointCount > 10) ildaFrame.params.path.targetPointCount--; break;
+
+        case '>': ildaFrame.params.path.targetPointCount += 10; break;
+        case '<': if(ildaFrame.params.path.targetPointCount > 20) ildaFrame.params.path.targetPointCount -= 10; break;
+
             
     }
 }
