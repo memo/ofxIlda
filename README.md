@@ -1,9 +1,9 @@
-ofxEtherdream
+ofxIlda
 =====================================
 
 Introduction
 ------------
-C++ openFrameworks addon for a device agnostic Ilda functionality.
+C++ openFrameworks addon for a device agnostic Ilda functionality. Currently only tested with the Etherdream DAC (ofxEtherdream) on OSX. Builds on top of ofPolyline, so all ofPolyline functionality is inherited.
 
 
 Licence
