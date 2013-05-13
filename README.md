@@ -19,7 +19,7 @@ Copy to your openFrameworks/addons folder.
 
 Dependencies
 ------------
-ofxIlda
+none
 
 
 Compatibility
