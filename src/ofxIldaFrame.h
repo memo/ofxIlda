@@ -112,18 +112,21 @@ namespace ofxIlda {
             vector<int> pathLengths;
             processedPolys = origPolys;
             for(int i=0; i<processedPolys.size(); i++) {
-                
-                // smooth paths
-                if(params.path.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.path.smoothAmount);
-                
-                // optimize paths
-                if(params.path.optimizeTolerance > 0) processedPolys[i].simplify(params.path.optimizeTolerance);
-                
-                // calculate total length (needed for auto spacing calculation)
-                if(params.path.targetPointCount > 0) {
-                    float l = processedPolys[i].getPerimeter();
-                    totalLength += l;
-                    pathLengths.push_back(l);
+                if(processedPolys[i].size()) {
+                    // smooth paths
+                    if(params.path.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.path.smoothAmount);
+                    
+                    // optimize paths
+                    if(params.path.optimizeTolerance > 0) processedPolys[i].simplify(params.path.optimizeTolerance);
+                    
+                    // calculate total length (needed for auto spacing calculation)
+                    if(params.path.targetPointCount > 0) {
+                        float l = processedPolys[i].getPerimeter();
+                        totalLength += l;
+                        pathLengths.push_back(l);
+                    }
+                } else {
+                    pathLengths.push_back(0);
                 }
             }
             
@@ -236,7 +239,7 @@ namespace ofxIlda {
         ofPolyline& getPolyProcessed(int i) {
             return processedPolys[i];
         }
-
+        
         
         //--------------------------------------------------------------
         ofPolyline& getLastPoly() {
