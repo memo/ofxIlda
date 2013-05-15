@@ -66,7 +66,7 @@ namespace ofxIlda {
             params.path.spacing = 0;
             
             params.draw.lines = true;
-            params.draw.points = false;
+            params.draw.points = true;
             params.draw.pointNumbers = false;
             
             params.output.color.set(1, 1, 1, 1);
