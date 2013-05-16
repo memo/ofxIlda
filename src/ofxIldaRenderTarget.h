@@ -79,7 +79,7 @@ namespace ofxIlda {
             colorImage.setFromPixels(pixels);
             greyImage.setFromColorImage(colorImage);
             
-            if(params.cv.blurAmount) greyImage.blur(params.cv.blurAmount * 2 + 1);
+            if(params.cv.blurAmount) greyImage.blurGaussian(params.cv.blurAmount * 2 + 1);
             if(params.cv.bottomThreshold) {
                 cvThreshold(greyImage.getCvImage(), greyImage.getCvImage(), params.cv.bottomThreshold*2+1, 0, CV_THRESH_TOZERO); greyImage.flagImageChanged();
             }
