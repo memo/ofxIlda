@@ -66,6 +66,10 @@ namespace ofxIlda {
         void end() { fbo.end(); }
         
         //--------------------------------------------------------------
+        void clear(float r=0, float g=0, float b=0, float a=0) { begin(); ofClear(r, g, b, a); end(); }
+
+        
+        //--------------------------------------------------------------
         float getWidth() { return fbo.getWidth(); }
         
         //--------------------------------------------------------------
