@@ -26,6 +26,8 @@ namespace ofxIlda {
                 bool collapse;  // (not implemented yet)
                 int targetPointCount;   // how many points in total should ALL paths in this frame be resampled to (zero to ignore)
                 float spacing;  // desired spacing between points. Set automatically by targetPointCount, or set manually. (zero to ignore)
+                float bias; // 0: spacing is equal, 1: more points weighted towards sharper corners
+                int biasReps;
             } path;
             
             struct {
@@ -109,25 +111,25 @@ namespace ofxIlda {
         //--------------------------------------------------------------
         void update() {
             float totalLength = 0;
-            vector<int> pathLengths;
+            //            vector<int> pathLengths;
             processedPolys = origPolys;
             for(int i=0; i<processedPolys.size(); i++) {
-                if(processedPolys[i].size()) {
-                    // smooth paths
-                    if(params.path.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.path.smoothAmount);
-                    
-                    // optimize paths
-                    if(params.path.optimizeTolerance > 0) processedPolys[i].simplify(params.path.optimizeTolerance);
-                    
-                    // calculate total length (needed for auto spacing calculation)
-                    if(params.path.targetPointCount > 0) {
-                        float l = processedPolys[i].getPerimeter();
-                        totalLength += l;
-                        pathLengths.push_back(l);
-                    }
-                } else {
-                    pathLengths.push_back(0);
+                //                if(processedPolys[i].size()) {
+                // smooth paths
+                if(params.path.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.path.smoothAmount);
+                
+                // optimize paths
+                if(params.path.optimizeTolerance > 0 && processedPolys[i].size() > 2) processedPolys[i].simplify(params.path.optimizeTolerance);
+                
+                // calculate total length (needed for auto spacing calculation)
+                if(params.path.targetPointCount > 0) {
+                    float l = processedPolys[i].getPerimeter();
+                    totalLength += l;
+                    //                        pathLengths.push_back(l);
                 }
+                //                } else {
+                //                    pathLengths.push_back(0);
+                //                }
             }
             
             
@@ -136,12 +138,76 @@ namespace ofxIlda {
                 params.path.spacing = totalLength / params.path.targetPointCount;
             }
             
-            
             // resample paths based on spacing (either as calculated by targetPointCount, or set by user)
             if(params.path.spacing) {
                 for(int i=0; i<processedPolys.size(); i++) {
                     processedPolys[i] = processedPolys[i].getResampledBySpacing(params.path.spacing);
                 }
+            }
+            
+//            if(params.path.bias && params.path.targetPointCount > 0) {
+            
+                // simplify first
+//                float simplifyAmount = ofLerp(0, 0.03, params.path.bias);
+//                for(int i=0; i<processedPolys.size(); i++) {
+//                    ofPolyline poly(processedPolys[i]);
+//                    if(processedPolys[i].size() > 2) {
+//                        poly.simplify(simplifyAmount);
+//                        processedPolys[i] = poly;
+//                    }
+//                }
+                
+                // loop until we have enough points
+                int currentTotalPoints = 0;
+//                while(currentTotalPoints < params.path.targetPointCount) {
+                for(int n=0; n<params.path.biasReps; n++) {
+                
+                    
+                    // find longest edge with biggest angle
+                    float maxAngleDistance = 0;
+                    int polyIndex = -1;
+                    int insertIndex = -1;
+                    ofPoint insertPoint;
+                    currentTotalPoints = 0;
+                    for(int i=0; i<processedPolys.size(); i++) {
+                        ofPolyline &poly = processedPolys[i];
+                        currentTotalPoints += poly.size();
+
+                        for(int j=1; j<poly.size()-1; j++) {
+                            float angle = poly.getAngleAtIndex(j) / 180.0f; // 0: straight, 1: 180 degrees
+                            float segmentLengthL = poly.getLengthAtIndex(j) - poly.getLengthAtIndex(j-1);
+                            float segmentLengthR = poly.getLengthAtIndex(j+1) - poly.getLengthAtIndex(j);
+                            float angleDistanceL = segmentLengthL;
+                            float angleDistanceR = segmentLengthR;
+                            ofPoint p0 = poly[j];
+                            ofPoint p1 = poly[j-1];
+                            ofPoint p2 = poly[j+1];
+                            
+                            if(angleDistanceL > maxAngleDistance) {
+                                maxAngleDistance = angleDistanceL;
+                                polyIndex = i;
+                                insertIndex = j-1;
+                                insertPoint = p0.interpolated(p1, 0.25);
+                            }
+                            if(angleDistanceR > maxAngleDistance) {
+                                maxAngleDistance = angleDistanceR;
+                                polyIndex = i;
+                                insertIndex = j;
+                                insertPoint = p0.interpolated(p2, 0.25);
+                            }
+                        }
+                    }
+                    
+                    // insert point
+                    if(polyIndex >= 0 && insertIndex > 0) {
+                        ofPolyline &poly = processedPolys[polyIndex];
+//                        ofPoint p1 = poly[pointIndex];
+//                        ofPoint p2 = poly[pointIndex+1];
+//                        ofPoint p = (p1 + p2)/2;
+                        poly.insertVertex(insertPoint, insertIndex);
+                    }
+//                }
+                
             }
             
             
