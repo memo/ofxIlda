@@ -40,6 +40,12 @@ namespace ofxIlda {
                 int endCount;       // how many end repeats to send
                 bool doCapX;        // cap out of range on x (otherwise wraps around)
                 bool doCapY;        // cap out of range on y (otherwise wraps around)
+                struct {
+                    bool doFlipX;
+                    bool doFlipY;
+                    ofVec2f offset;
+                    ofVec2f scale;
+                } transform;
             } output;
         } params;
         
@@ -74,6 +80,11 @@ namespace ofxIlda {
             params.output.endCount = 30;
             params.output.doCapX = false;
             params.output.doCapY = false;
+            
+            params.output.transform.doFlipX = false;
+            params.output.transform.doFlipY = false;
+            params.output.transform.offset.set(0, 0);
+            params.output.transform.scale.set(1, 1);
         }
         
         
@@ -96,6 +107,10 @@ namespace ofxIlda {
             s << "output.endCount : " << params.output.endCount << endl;
             s << "output.doCapX : " << params.output.doCapX << endl;
             s << "output.doCapY : " << params.output.doCapY << endl;
+            s << "output.transform.doFlipX : " << params.output.transform.doFlipX << endl;
+            s << "output.transform.doFlipY : " << params.output.transform.doFlipY << endl;
+            s << "output.transform.offset : " << params.output.transform.offset << endl;
+            s << "output.transform.scale : " << params.output.transform.scale << endl;
             
             s << endl;
             
@@ -254,6 +269,41 @@ namespace ofxIlda {
         }
         
         //--------------------------------------------------------------
+        ofPoint transformPoint(ofPoint p) const {
+            // flip
+            if(params.output.transform.doFlipX) p.x = 1 - p.x;
+            if(params.output.transform.doFlipY) p.y = 1 - p.y;
+            
+            // scale
+            if(params.output.transform.scale.lengthSquared() > 0) {
+                p -= ofPoint(0.5, 0.5);
+                p *= params.output.transform.scale;
+                p += ofPoint(0.5, 0.5);
+            }
+            
+            // offset
+            p += params.output.transform.offset;
+            
+
+
+            
+            // cap or wrap
+            if(p.x < 0) {
+                p.x = params.output.doCapX ? 0 : 1 + p.x - ceil(p.x);
+            } else if(p.x > 1) {
+                p.x = params.output.doCapX ? 1 : p.x - floor(p.x);
+            }
+            
+            if(p.y < 0) {
+                p.y = params.output.doCapY ? 0 : 1 + p.y - ceil(p.y);
+            } else if(p.y > 1) {
+                p.y = params.output.doCapY ? 1 : p.y - floor(p.y);
+            }
+            
+            return p;
+        }
+        
+        //--------------------------------------------------------------
         void updateFinalPoints() {
             points.clear();
             for(int i=0; i<processedPolys.size(); i++) {
@@ -261,42 +311,32 @@ namespace ofxIlda {
                 
                 if(poly.size() > 0) {
                     
+                    ofPoint startPoint = transformPoint(poly.getVertices().front());
+                    ofPoint endPoint = transformPoint(poly.getVertices().back());
+                    
                     // blanking at start
                     for(int n=0; n<params.output.blankCount; n++) {
-                        points.push_back( Point(poly.getVertices().front(), ofFloatColor(0, 0, 0, 0)));
+                        points.push_back( Point(startPoint, ofFloatColor(0, 0, 0, 0)));
                     }
                     
                     // repeat at start
                     for(int n=0; n<params.output.endCount; n++) {
-                        points.push_back( Point(poly.getVertices().front(), params.output.color) );
+                        points.push_back( Point(startPoint, params.output.color) );
                     }
                     
                     // add points
                     for(int j=0; j<poly.size(); j++) {
-                        if(poly[j].x < 0) {
-                            poly[j].x = params.output.doCapX ? 0 : 1 + poly[j].x - ceil(poly[j].x);
-                        } else if(poly[j].x > 1) {
-                            poly[j].x = params.output.doCapX ? 1 : poly[j].x - floor(poly[j].x);
-                        }
-                        
-                        if(poly[j].y < 0) {
-                            poly[j].y = params.output.doCapY ? 0 : 1 + poly[j].y - ceil(poly[j].y);
-                        } else if(poly[j].y > 1) {
-                            poly[j].y = params.output.doCapY ? 1 : poly[j].y - floor(poly[j].y);
-                        }
-                        
-                        
-                        points.push_back( Point(poly[j], params.output.color) );
+                        points.push_back( Point(transformPoint(poly[j]), params.output.color) );
                     }
                     
                     // repeat at end
                     for(int n=0; n<params.output.endCount; n++) {
-                        points.push_back( Point(poly.getVertices().back(), params.output.color) );
+                        points.push_back( Point(endPoint, params.output.color) );
                     }
                     
                     // blanking at end
                     for(int n=0; n<params.output.blankCount; n++) {
-                        points.push_back( Point(poly.getVertices().back(), ofFloatColor(0, 0, 0, 0) ));
+                        points.push_back( Point(endPoint, ofFloatColor(0, 0, 0, 0) ));
                     }
                     
                 }
