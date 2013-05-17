@@ -88,6 +88,8 @@ void testApp::keyPressed(int key){
         case 's': ildaFrame.params.output.transform.scale.y -= 0.05; break;
         case 'a': ildaFrame.params.output.transform.scale.x -= 0.05; break;
         case 'd': ildaFrame.params.output.transform.scale.x += 0.05; break;
+            
+        case 'C': ildaFrame.drawCalibration(); break;
     }
 }
 

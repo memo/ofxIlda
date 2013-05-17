@@ -269,6 +269,18 @@ namespace ofxIlda {
         }
         
         //--------------------------------------------------------------
+        void drawCalibration() {
+            addPoly(ofPolyline::fromRectangle(ofRectangle(0, 0, 1, 1)));
+            ofPolyline &p1 = addPoly();
+            p1.lineTo(0.25, 0.25);
+            p1.lineTo(0.75, 0.75);
+            
+            ofPolyline &p2 = addPoly();
+            p2.lineTo(0.75, 0.25);
+            p2.lineTo(0.25, 0.75);
+        }
+
+        //--------------------------------------------------------------
         ofPoint transformPoint(ofPoint p) const {
             // flip
             if(params.output.transform.doFlipX) p.x = 1 - p.x;
