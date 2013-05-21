@@ -278,6 +278,11 @@ namespace ofxIlda {
             ofPolyline &p2 = addPoly();
             p2.lineTo(0.75, 0.25);
             p2.lineTo(0.25, 0.75);
+            
+            ofPolyline &p3 = addPoly();
+            float r = .25 * sqrt(2.0f);
+            p3.arc(0.5, 0.5, r, r, 0, 360, 60);
+
         }
 
         //--------------------------------------------------------------
