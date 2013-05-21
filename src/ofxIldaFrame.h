@@ -14,20 +14,13 @@
 
 #include "ofMain.h"
 #include "ofxIldaPoint.h"
+#include "ofxIldaPolyProcessor.h"
 
 namespace ofxIlda {
     
     class Frame {
     public:
         struct {
-            struct {
-                int smoothAmount;   // how much to smooth the path (zero to ignore)
-                float optimizeTolerance;    // howmuch to optimize the path, based on curvature (zero to ignore)
-                bool collapse;  // (not implemented yet)
-                int targetPointCount;   // how many points in total should ALL paths in this frame be resampled to (zero to ignore)
-                float spacing;  // desired spacing between points. Set automatically by targetPointCount, or set manually. (zero to ignore)
-            } path;
-            
             struct {
                 bool lines; // draw lines
                 bool points;    // draw points
@@ -49,6 +42,8 @@ namespace ofxIlda {
             } output;
         } params;
         
+        PolyProcessor polyProcessor; // params and functionality for processing the polys
+        
         struct {
             int pointCountOrig;    // READONLY current total number of points across all paths (excluding blanks and end repititons)
             int pointCountProcessed; // same as above, except AFTER being processed
@@ -64,12 +59,6 @@ namespace ofxIlda {
         void setDefaultParams() {
             memset(&params, 0, sizeof(params));  // safety catch all default to zero
             memset(&stats, 0, sizeof(stats));  // safety catch all default to zero
-            
-            params.path.smoothAmount = 0;
-            params.path.optimizeTolerance = 0;
-            params.path.collapse = 0;
-            params.path.targetPointCount = 500;
-            params.path.spacing = 0;
             
             params.draw.lines = true;
             params.draw.points = true;
@@ -89,15 +78,11 @@ namespace ofxIlda {
         
         
         //--------------------------------------------------------------
-        string getParams() {
+        string getString() {
             stringstream s;
-            s << "params:" << endl;
-            s << "path.smoothAmount : " << params.path.smoothAmount << endl;
-            s << "path.optimizeTolerance : " << params.path.optimizeTolerance << endl;
-            s << "path.collapse : " << params.path.collapse << endl;
-            s << "path.targetPointCount : " << params.path.targetPointCount << endl;
-            s << "path.spacing : " << params.path.spacing << endl;
+            s << polyProcessor.getString();
             
+            s << "params:" << endl;
             s << "draw.lines : " << params.draw.lines << endl;
             s << "draw.point : " << params.draw.points << endl;
             s << "draw.pointNumbers : " << params.draw.pointNumbers << endl;
@@ -123,42 +108,7 @@ namespace ofxIlda {
         
         //--------------------------------------------------------------
         void update() {
-            float totalLength = 0;
-            vector<int> pathLengths;
-            processedPolys = origPolys;
-            for(int i=0; i<processedPolys.size(); i++) {
-                if(processedPolys[i].size()) {
-                    // smooth paths
-                    if(params.path.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.path.smoothAmount);
-                    
-                    // optimize paths
-                    if(params.path.optimizeTolerance > 0) processedPolys[i].simplify(params.path.optimizeTolerance);
-                    
-                    // calculate total length (needed for auto spacing calculation)
-                    if(params.path.targetPointCount > 0) {
-                        float l = processedPolys[i].getPerimeter();
-                        totalLength += l;
-                        pathLengths.push_back(l);
-                    }
-                } else {
-                    pathLengths.push_back(0);
-                }
-            }
-            
-            
-            // calculate spacing based on desired total number of points
-            if(params.path.targetPointCount > 0 && totalLength > 0) {
-                params.path.spacing = totalLength / params.path.targetPointCount;
-            }
-            
-            
-            // resample paths based on spacing (either as calculated by targetPointCount, or set by user)
-            if(params.path.spacing) {
-                for(int i=0; i<processedPolys.size(); i++) {
-                    processedPolys[i] = processedPolys[i].getResampledBySpacing(params.path.spacing);
-                }
-            }
-            
+            polyProcessor.update(origPolys, processedPolys);
             
             // get stats
             stats.pointCountOrig = 0;

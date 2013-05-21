@@ -57,7 +57,7 @@
     </Toggle_cv.doFindHoles>
     <SliderInt_path.smoothAmount>
         <name>path.smoothAmount</name>
-        <value>31</value>
+        <value>36</value>
     </SliderInt_path.smoothAmount>
     <Toggle_path.contourCollapse>
         <name>path.contourCollapse</name>
@@ -65,23 +65,23 @@
     </Toggle_path.contourCollapse>
     <SliderFloat_path.optimizeTolerance>
         <name>path.optimizeTolerance</name>
-        <value>0.000000000</value>
+        <value>0.035000000</value>
     </SliderFloat_path.optimizeTolerance>
     <SliderInt_path.targetPointCount>
         <name>path.targetPointCount</name>
-        <value>500</value>
+        <value>700</value>
     </SliderInt_path.targetPointCount>
     <SliderFloat_path.spacing>
         <name>path.spacing</name>
-        <value>0.008696286</value>
+        <value>0.008001034</value>
     </SliderFloat_path.spacing>
     <SliderInt_stats.pointCountOrig>
         <name>stats.pointCountOrig</name>
-        <value>1513</value>
+        <value>1838</value>
     </SliderInt_stats.pointCountOrig>
     <SliderInt_stats.pointCountProcessed>
         <name>stats.pointCountProcessed</name>
-        <value>501</value>
+        <value>702</value>
     </SliderInt_stats.pointCountProcessed>
     <Toggle_doDrawFbo>
         <name>doDrawFbo</name>

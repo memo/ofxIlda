@@ -43,11 +43,11 @@ void testApp::setup(){
     gui.addToggle("cv.doFindHoles", ildaFbo.params.cv.doFindHoles);
     
     gui.addTitle("PATH PROCESSING");
-    gui.addSlider("path.smoothAmount", ildaFrame.params.path.smoothAmount, 0, 100);
-    gui.addToggle("path.contourCollapse", ildaFrame.params.path.collapse);
-    gui.addSlider("path.optimizeTolerance", ildaFrame.params.path.optimizeTolerance, 0, 1);
-    gui.addSlider("path.targetPointCount", ildaFrame.params.path.targetPointCount, 0, 5000);
-    gui.addSlider("path.spacing", ildaFrame.params.path.spacing, 0, 1);
+    gui.addSlider("path.smoothAmount", ildaFrame.polyProcessor.params.smoothAmount, 0, 100);
+    gui.addToggle("path.contourCollapse", ildaFrame.polyProcessor.params.collapse);
+    gui.addSlider("path.optimizeTolerance", ildaFrame.polyProcessor.params.optimizeTolerance, 0, 1);
+    gui.addSlider("path.targetPointCount", ildaFrame.polyProcessor.params.targetPointCount, 0, 5000);
+    gui.addSlider("path.spacing", ildaFrame.polyProcessor.params.spacing, 0, 1);
     gui.addSlider("stats.pointCountOrig", ildaFrame.stats.pointCountOrig, 0, 10000);
     gui.addSlider("stats.pointCountProcessed", ildaFrame.stats.pointCountProcessed, 0, 10000);
     
