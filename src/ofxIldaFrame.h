@@ -205,6 +205,15 @@ namespace ofxIlda {
             return processedPolys[i];
         }
         
+        //--------------------------------------------------------------
+        vector<ofPolyline> &getPolys() {
+            return origPolys;
+        }
+        
+        //--------------------------------------------------------------
+        vector<ofPolyline> &getProcessedPolys() {
+            return processedPolys;
+        }
         
         //--------------------------------------------------------------
         ofPolyline& getLastPoly() {
