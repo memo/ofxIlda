@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "ofxIldaPoly.h"
+
 namespace ofxIlda {
     class PolyProcessor {
     public:
@@ -43,14 +45,14 @@ namespace ofxIlda {
         }
 
         //--------------------------------------------------------------
-        void update(const vector<ofPolyline> &origPolys, vector<ofPolyline> &processedPolys) {
+        void update(const vector<Poly> &origPolys, vector<Poly> &processedPolys) {
             float totalLength = 0;
             vector<int> pathLengths;
             processedPolys = origPolys;
             for(int i=0; i<processedPolys.size(); i++) {
                 if(processedPolys[i].size()) {
                     // smooth paths
-                    if(params.smoothAmount > 0) processedPolys[i] = processedPolys[i].getSmoothed(params.smoothAmount);
+                    if(params.smoothAmount > 0) processedPolys[i].setFromPolyline(processedPolys[i].getSmoothed(params.smoothAmount));
                     
                     // optimize paths
                     if(params.optimizeTolerance > 0) processedPolys[i].simplify(params.optimizeTolerance);
@@ -76,7 +78,7 @@ namespace ofxIlda {
             // resample paths based on spacing (either as calculated by targetPointCount, or set by user)
             if(params.spacing) {
                 for(int i=0; i<processedPolys.size(); i++) {
-                    processedPolys[i] = processedPolys[i].getResampledBySpacing(params.spacing);
+                    processedPolys[i].setFromPolyline(processedPolys[i].getResampledBySpacing(params.spacing));
                 }
             }
         }

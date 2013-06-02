@@ -70,6 +70,8 @@
 		3b906433bea2a463e0874d2fa822f937 /* etherdream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = etherdream.h; path = ../../../addons/ofxEtherDream/libs/driver/libetherdream/etherdream.h; sourceTree = SOURCE_ROOT; };
 		5f7b2fa46bb57f9a6dd29ef546812c78 /* protocol.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = protocol.h; path = ../../../addons/ofxEtherDream/libs/common/protocol.h; sourceTree = SOURCE_ROOT; };
 		89d5795eec647196e421147a2d02e231 /* ofxIldaFrame.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxIldaFrame.h; path = ../../../addons/ofxIlda/src/ofxIldaFrame.h; sourceTree = SOURCE_ROOT; };
+		BB48198A175B71540033EAA0 /* ofxIldaPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxIldaPoly.h; path = ../src/ofxIldaPoly.h; sourceTree = "<group>"; };
+		BB48198B175B715A0033EAA0 /* ofxIldaPolyProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxIldaPolyProcessor.h; path = ../src/ofxIldaPolyProcessor.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		BBB77815174114BF000704A0 /* license.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = license.md; path = ../license.md; sourceTree = "<group>"; };
 		BBB77816174114C0000704A0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -169,6 +171,8 @@
 		6894321556b8d4ebfb6234c4286b59d3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				BB48198B175B715A0033EAA0 /* ofxIldaPolyProcessor.h */,
+				BB48198A175B71540033EAA0 /* ofxIldaPoly.h */,
 				89d5795eec647196e421147a2d02e231 /* ofxIldaFrame.h */,
 				3479f59cf46e8638fc4fece264e67994 /* ofxIldaPoint.h */,
 				c0ca360e2a954d03df99afb316ef0335 /* ofxIldaRenderTarget.h */,

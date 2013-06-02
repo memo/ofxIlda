@@ -110,10 +110,7 @@ namespace ofxIlda {
         
         //--------------------------------------------------------------
         void update() {
-			vector<ofPolyline> tmpPolys;
-            polyProcessor.update(convertToOfPolyline(origPolys), tmpPolys);
-            processedPolys = convertToPoly(tmpPolys);
-			
+            polyProcessor.update(origPolys, processedPolys);
 			
             // get stats
             stats.pointCountOrig = 0;
@@ -121,7 +118,6 @@ namespace ofxIlda {
             for(int i=0; i<processedPolys.size(); i++) {
                 stats.pointCountOrig += origPolys[i].size();
                 stats.pointCountProcessed += processedPolys[i].size();
-				processedPolys[i].color = origPolys[i].color;
             }
             
             updateFinalPoints();
@@ -189,21 +185,34 @@ namespace ofxIlda {
         }
         
         //--------------------------------------------------------------
-        Poly& addPoly() {
-			Poly poly;
-			poly.color = params.output.color;
-            return addPoly(poly);
-        }
-        
-        //--------------------------------------------------------------
         Poly& addPoly(const Poly& poly) {
             origPolys.push_back(poly);
             return origPolys.back();
         }
         
         //--------------------------------------------------------------
+        Poly& addPoly() {
+            return addPoly(Poly(params.output.color));
+        }
+        
+        //--------------------------------------------------------------
+        Poly& addPoly(const ofPolyline& polyline) {
+            return addPoly(polyline, params.output.color);
+        }
+        
+        //--------------------------------------------------------------
+        Poly& addPoly(const ofPolyline& polyline, ofFloatColor color) {
+            return addPoly(Poly(polyline, color));
+        }
+
+        //--------------------------------------------------------------
         Poly& addPoly(const vector<ofPoint> points) {
             return addPoly(Poly(points));
+        }
+        
+        //--------------------------------------------------------------
+        Poly& addPoly(const vector<ofPoint> points, ofFloatColor color) {
+            return addPoly(Poly(points, color));
         }
         
         //--------------------------------------------------------------
@@ -340,22 +349,5 @@ namespace ofxIlda {
         vector<Poly> origPolys;   // stores the original polys
         vector<Poly> processedPolys;  // stores the processed (smoothed, collapsed, optimized, resampled etc).
         vector<Point> points;   // final points to send
-        
-		//--------------------------------------------------------------
-		vector<ofPolyline> convertToOfPolyline(vector<Poly> polys){
-			vector<ofPolyline> res;
-			for(int i = 0; i < polys.size(); i++){
-				res.push_back(polys[i]);
-			}
-			return res;
-		};
-		//--------------------------------------------------------------
-		vector<Poly> convertToPoly(vector<ofPolyline> polys){
-			vector<Poly> res;
-			for(int i = 0; i < polys.size(); i++){
-				res.push_back(Poly(polys[i].getVertices()));
-			}
-			return res;
-		};
     };
 }

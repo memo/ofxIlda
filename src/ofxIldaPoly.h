@@ -13,20 +13,20 @@ namespace ofxIlda {
 	class Poly: public ofPolyline{
 	public:
 		ofFloatColor color;
-		Poly(){clear();};
-		Poly(const vector<ofPoint>& verts){
-			clear();
-			addVertices(verts);
-		};
-		//----------------------------------------------------------
-		static Poly fromRectangle(const ofRectangle& rect) {
-			Poly polyline;
-			polyline.addVertex(rect.getMin());
-			polyline.addVertex(rect.getMaxX(),rect.getMinY());
-			polyline.addVertex(rect.getMax());
-			polyline.addVertex(rect.getMinX(),rect.getMaxY());
-			polyline.close();
-			return polyline;
-		};
+		Poly() : color(ofFloatColor(1, 1, 1, 1)) {}
+
+        Poly(ofFloatColor color) : color(color) {}
+        
+        Poly(const Poly& poly) : ofPolyline(poly), color(poly.color) {}
+        
+        Poly(const ofPolyline& polyline) : ofPolyline(polyline), color(ofFloatColor(1, 1, 1, 1)) {}
+        
+        Poly(const ofPolyline& polyline, ofFloatColor color) : ofPolyline(polyline), color(color) {}
+
+		Poly(const vector<ofPoint>& verts) : ofPolyline(verts), color(ofFloatColor(1, 1, 1, 1)) {}
+
+		Poly(const vector<ofPoint>& verts, ofFloatColor color) : ofPolyline(verts), color(color) {}
+        
+        void setFromPolyline(const ofPolyline& polyline) { ofFloatColor tmpColor = color; *this = polyline; color = tmpColor; }
 	};
 }
