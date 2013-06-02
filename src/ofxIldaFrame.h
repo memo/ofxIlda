@@ -3,7 +3,7 @@
 //  ofxIlda
 //
 //  Created by Memo Akten on 09/05/2013.
-//
+//  Updated by Mitsuru Takeuchi on 02/06/2013.
 //
 
 
@@ -13,36 +13,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxIldaPoly.h"
 #include "ofxIldaPoint.h"
 #include "ofxIldaPolyProcessor.h"
 
-
-namespace ofxIlda {
-	class Poly: public ofPolyline{
-	public:
-		ofFloatColor color;
-		Poly(){clear();};
-		Poly(const vector<ofPoint>& verts){
-			clear();
-			addVertices(verts);
-		};
-		//----------------------------------------------------------
-		static Poly fromRectangle(const ofRectangle& rect) {
-			Poly polyline;
-			polyline.addVertex(rect.getMin());
-			polyline.addVertex(rect.getMaxX(),rect.getMinY());
-			polyline.addVertex(rect.getMax());
-			polyline.addVertex(rect.getMinX(),rect.getMaxY());
-			polyline.close();
-			return polyline;
-		};
-		ofPolyline toOfPolyline(){
-			ofPolyline res = ofPolyline();
-			res.addVertices(getVertices());
-			return res;
-		};
-	};
-};
 
 namespace ofxIlda {
 	
@@ -366,7 +340,6 @@ namespace ofxIlda {
         vector<Poly> origPolys;   // stores the original polys
         vector<Poly> processedPolys;  // stores the processed (smoothed, collapsed, optimized, resampled etc).
         vector<Point> points;   // final points to send
-//        vector<ofFloatColor> processedPolysColor;	// color per poly
         
 		//--------------------------------------------------------------
 		vector<ofPolyline> convertToOfPolyline(vector<Poly> polys){
