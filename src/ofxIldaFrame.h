@@ -216,6 +216,11 @@ namespace ofxIlda {
         }
         
         //--------------------------------------------------------------
+        void addPolys(const vector<ofPolyline> &polylines) {
+            for(int i=0; i<polylines.size(); i++) addPoly(polylines[i]);
+        }
+        
+        //--------------------------------------------------------------
         void addPolys(const vector<Poly> &polys) {
             for(int i=0; i<polys.size(); i++) addPoly(polys[i]);
         }
