@@ -146,7 +146,7 @@ namespace ofxIlda {
                     //                if(i < data.size()-1) {
                     //                    ofPoint p1 = data[i+1];
                     ////                    ofSetColor(p1.r * 255, p1.g * 255, p1.b * 255, p1.a * 255);
-                    //                    ofLine(p0.x, p0.y, p1.x, p1.y);
+                    //                    ofDrawLine(p0.x, p0.y, p1.x, p1.y);
                     //                }
                     //            }
                 }
