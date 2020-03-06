@@ -80,5 +80,15 @@ namespace ofxIlda {
                            );
         }
         
+        ofFloatColor getColor(){
+            ofFloatColor c;
+            c.r= (float)this->r/kIldaMaxIntensity;
+            c.g= (float)this->g/kIldaMaxIntensity;
+            c.b= (float)this->b/kIldaMaxIntensity;
+            c.a= (float)this->a/kIldaMaxIntensity;
+            
+            return c;
+        }
+        
     };
 }
