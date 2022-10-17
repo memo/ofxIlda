@@ -160,7 +160,7 @@ namespace ofxIlda {
                     
 					glBegin(GL_POINTS);
                     for(int i=0; i<poly.size(); i++) {
-                        ofPoint &p = poly[i];
+                        glm::vec3 &p = poly[i];
                         //                Point &p = data[i];
                         //                ofSetColor(p.r * 255, p.g * 255, p.b * 255, p.a * 255);
                         glVertex2f(p.x, p.y);
@@ -206,12 +206,12 @@ namespace ofxIlda {
         }
 
         //--------------------------------------------------------------
-        Poly& addPoly(const vector<ofPoint> points) {
+        Poly& addPoly(const vector<glm::vec3> points) {
             return addPoly(Poly(points));
         }
         
         //--------------------------------------------------------------
-        Poly& addPoly(const vector<ofPoint> points, ofFloatColor color) {
+        Poly& addPoly(const vector<glm::vec3> points, ofFloatColor color) {
             return addPoly(Poly(points, color));
         }
         
